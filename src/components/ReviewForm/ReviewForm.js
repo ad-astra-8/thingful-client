@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import TokenService from '../../services/token-service'
 import ThingContext from '../../contexts/ThingContext'
 import ThingApiService from '../../services/thing-api-service'
 import { Button, Textarea } from '../Utils/Utils'
@@ -11,6 +12,10 @@ export default class ReviewForm extends Component {
     ev.preventDefault()
     const { thing } = this.context
     const { text, rating } = ev.target
+    const { user_name, password } = ev.target
+    TokenService.saveAuthToken(
+             TokenService.makeBasicAuthToken(user_name.value, password.value)
+           )
 
     ThingApiService.postReview(thing.id, text.value, Number(rating.value))
       .then(this.context.addReview)
